@@ -1,0 +1,87 @@
+p.title {
+font-family: Montserrat, Gill Sans, Century Gothic, Verdana, sans-serif;
+font-size: 54px;
+letter-spacing: -3px;
+margin-top: 0px;
+line-height: 38px;
+position: absolute;
+font-weight: bold;
+color: black;
+}
+
+p.author {
+font-family: Gill Sans, Century Gothic, Verdana, sans-serif;
+font-size: 10pt;
+line-height: 12pt;
+margin-top: 85px;
+margin-left: 0px;
+color: #bbb;
+position: absolute;
+}
+
+.subscript {
+line-height:0px;
+}
+
+p {  margin-top: 0.3em; margin-bottom: 0em; }
+
+a:link {
+color: #999;
+text-decoration: none;
+}
+
+a:visited {
+color: #999;
+text-decoration: none;
+}
+
+a:hover {
+color: #333;
+text-decoration: none;
+}
+
+a:active {
+color: #999;
+text-decoration: none;
+}
+
+body{
+margin-top: 0px;
+margin-left: 0px;
+background-color: white;
+background-repeat: no-repeat;
+}
+
+.header {
+float:left;
+width: 320px;
+height: 120px;
+position: absolute;
+margin-left: 200px;
+margin-top: 120px;
+}
+
+.left-div {
+float: left;
+position: relative;
+width: 800px;
+height: 600px;
+margin-right: 0px;
+margin-left: 200px;
+margin-top: 260px;
+background-color: none;
+opacity: 1.0;
+}
+
+.stroke {
+fill: none;
+stroke: #d2d2d2;
+stroke-width: 1px;
+}
+
+path {
+stroke: gray;
+stroke-width: 1px;
+opacity:1;
+fill: none;
+}

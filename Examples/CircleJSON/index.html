@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+    <!-- In the HEAD section we have the external resources and dependencies -->
+    <head>
+        <!-- Here we define the set of characters we use -->
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+        <!-- Here we get the D3 javascript library  -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/d3/4.8.0/d3.min.js"></script>
+
+        <!-- Here we get the common styles that apply to similar elements -->
+        <link type="text/css" rel="stylesheet" href="./skylines.css">
+    </head>
+
+    <body>
+
+        <!-- This is the box where the dataviz will be drawn -->
+        <div class="left-div">
+        </div>
+
+        <!-- This is the box where the title is -->
+        <div class="header">
+            <p class="title">The Circle</br>with JSON</p>
+    <p class="author">by Someone</p>
+    </div>
+
+<!-- Here goes the javascript bit with the D3.js code -->
+<script type="text/javascript">
+
+    //-------------------------------------------- SVG definition
+
+    // We start by defining the size of the SVG 
+    var width = 980;
+    var height = 900;
+
+    // We put the SVG inside the DIV and we define two attributes: width and height
+    var svgres = d3.select("div.left-div")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+
+    // We create a group to gather all similar elements and keep the dataviz tidy and clean
+    dataviz = svgres.append("g")
+
+    // ------------------------------------------- DATA
+
+    var datos = [180,50,120,50,40,30]
+
+    // ------------------------------------------- DRAW A CIRCLE
+    
+    d3.json("../DATA/co2_brw_obs.json", function (error, data2) {
+    
+    console.log(error)
+        
+    dataviz
+        .selectAll("circle")
+        .data(data2)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d){
+            return 20 + 10 * d.index;})
+        .attr("cy", function(d){
+            return d.obs;})
+        .attr("r", function(d){
+            return 5;})
+        .style("opacity", 1)
+        .attr("fill", function(d){
+            return d3.rgb(0,155,0);})
+        .attr("stroke", "none")
+        .attr("stroke-width",1)
+        
+    })
+
+</script>
+
+</body>
+
+</html>

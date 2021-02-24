@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/4.8.0/d3.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="./flowers.css">
+</head>
+
+<body>
+
+    <div class="leftpolyresources-div">
+    </div>
+
+    <div class="header">
+        <p class="title">Pick</br>a flower</p>
+    </div>
+
+    <script type="text/javascript">
+
+//--------------------------- SVG definition
+
+var widthres = 980;
+var heightres = 900;
+
+var svgres = d3.select("div.leftpolyresources-div")
+    .append("svg")
+    .attr("width", widthres)
+    .attr("height", heightres)
+
+//--------------------------- Groups definition
+
+dataviz = svgres.append("g")
+        
+//--------------------------- Constants definition
+
+var lineGenerator = d3.line()
+    .curve(d3.curveCardinal);
+
+//--------------- Assign an interpolated polygon to each group
+
+var mypoints = [[40, 10], [80, 120], [40, 160], [0, 120]];
+
+var pathData = lineGenerator(mypoints);
+
+        dataviz
+            .append('path')
+            .attr('d', pathData)
+            .style('stroke-width',2)
+            .style("opacity", .3)
+            .style("stroke", d3.rgb(100, 100, 100));
+
+</script>
+
+</body>
+
+</html>
