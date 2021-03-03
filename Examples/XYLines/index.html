@@ -49,13 +49,13 @@
         var yAxis = d3.axisLeft().scale(y).ticks(6, ",.0f");
 
         var thelineac = d3.line()
-            .defined(function (d) { return d.index < 250; })
+//            .defined(function (d) { return d.index < 250; })
             .curve(d3.curveBasisOpen)
             .x(function (d) { return x(d.index); })
             .y(function (d) { return y(d.ac); });
 
         var thearea50 = d3.area()
-            .defined(function (d) { return d.index > 48 && d.index < 62; })
+            .defined(function (d) { return d.index > 0 && d.index < 11; })
             .curve(d3.curveBasisOpen)
             .x(function (d) { return x(d.index); })
             .y0(function (d) { return y(0); })

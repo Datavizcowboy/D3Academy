@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+    <!-- In the HEAD section we have the external resources and dependencies -->
+    <head>
+        <!-- Here we define the set of characters we use -->
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+        <!-- Here we get the D3 javascript library  -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/d3/4.8.0/d3.min.js"></script>
+
+        <!-- Here we get the common styles that apply to similar elements -->
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet'>
+        <link type="text/css" rel="stylesheet" href="./skylines.css">
+    </head>
+
+    <body>
+
+        <!-- This is the box where the dataviz will be drawn -->
+        <div class="left-div">
+        </div>
+
+        <!-- This is the box where the title is -->
+        <div class="header">
+            <p class="title">The</br>One</p>
+    <p class="author">by Someone</p>
+    </div>
+
+<!-- Here goes the javascript bit with the D3.js code -->
+<script type="text/javascript">
+
+    //-------------------------------------------- SVG definition
+
+    // We start by defining the size of the SVG 
+    var width = 980;
+    var height = 900;
+
+    // We put the SVG inside the DIV and we define two attributes: width and height
+    var svgres = d3.select("div.left-div")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+
+    
+    // We create the grid of groups before plugging in the data
+    var thespot = 0
+    for (lev = 0; lev < 5; lev++) {
+        for (k = 0; k < 8; k++) {
+            thespot = thespot + 1
+            var myGraph = svgres.append('g')
+            .attr("transform", function (d) { 
+                return "translate(" + (0 + k * 120) + "," + (0 + lev * 120 ) + ")"; })
+            .attr("id", function () { return "spot_" + thespot })
+            }
+    }
+
+    // We create a group to gather all similar elements and keep the dataviz tidy and clean
+    dataviz = svgres.append("g")
+    dataviz2 = svgres.append("g")
+
+    // ------------------------------------------- DATA
+
+    var datos = [[18,5],[12,5],[4,3]]
+
+    // ------------------------------------------- DRAW A CIRCLE
+
+    // We assign an element to each one of the groups. 
+    for (h = 0; h < thespot; h++) {
+
+    d3.select("#spot_"+h)
+        .selectAll("circle")
+        .data(datos)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d){
+        console.log(d[0])
+        rand = Math.random()
+        return 40 + 2 * rand * d[0];})
+        .attr("cy", function(d){
+        rand = Math.random()
+        return 40 + 2 * rand * 30;})
+        .attr("r", function(d){
+        return d[0];})
+        .style("opacity", 1)
+        .attr("fill", function(d){return d3.rgb(d[0]*10,255,d[1]*20);})
+        .attr("stroke", "none")
+        .attr("stroke-width",6)
+        
+    }
+
+
+</script>
+
+</body>
+
+</html>
