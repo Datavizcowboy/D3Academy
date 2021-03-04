@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<!--
+
+Copyright 2021 The MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="d3-scale-radial.js"></script>
+  <style>
+    text {
+      font-size: 14px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+      
+    var margin = {top: 20, right: 10, bottom: 20, left: 10};
+    
+    var width = 960 - margin.left - margin.right,
+    	height = 500 - margin.top - margin.bottom;
+    
+    var svg = d3.select("body").append("svg")
+    	.attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+    	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    var g = svg.append("g")
+    	.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    
+    var innerRadius = 150,
+        outerRadius = Math.min(width, height) / 2 - 6;
+    
+    var parseTime = d3.timeParse("%d-%b-%y");
+    
+    
+    var x = d3.scaleTime()
+        .range([0, 2 * Math.PI]);
+    
+    var y = d3.scaleRadial()
+    		.range([innerRadius, outerRadius]);
+    
+    var line = d3.lineRadial()
+    		.angle(function(d) { return x(d.Date); })
+    		.radius(function(d) { return y(d.Close); })
+                .curve(d3.curveCardinal)
+    
+    
+    d3.csv("../DATA/twtr.csv" ,function(d) {
+            d.Date = parseTime(d.Date);
+            d.Close = +d.Close;
+            return d;
+                }, function(error, data) {
+        if (error) throw error;
+      
+        x.domain(d3.extent(data, function(d) { return d.Date; }));
+  		y.domain(d3.extent(data, function(d) { return d.Close; }));
+      
+      var linePlot = g.append("path")
+      	.datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "#4099ff")
+        .attr("d", line);
+      
+      var yAxis = g.append("g")
+          .attr("text-anchor", "middle");
+
+  
+      yAxis.append("circle")
+      		.attr("fill", "none")
+          .attr("stroke", "black")
+      		.attr("opacity", 0.2)
+          .attr("r", function() { return y(y.domain()[0])});
+      
+
+      var xAxis = g.append("g");
+  
+      
+    });
+    
+  </script>
+</body>
