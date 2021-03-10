@@ -87,7 +87,7 @@
                 .style("fill", d3.rgb(225, 225, 225))
                 .attr("d", thearea50(data))
 
-            funits.append("path")
+            var funitsline = funits.append("path")
                 .attr('transform', 'translate(' + (0) + ',300)')
                 .attr("class", "line")
                 .style("stroke-width", "2px")
@@ -95,6 +95,18 @@
                 .style("opacity", 1)
                 .style("stroke", "midnightblue")
                 .attr("d", thelineac(data))
+            
+            //----------------------------------------- DRAW THE LINE IN REAL TIME
+            
+            var totalLengthNZL = funitsline.node().getTotalLength();
+
+            funitsline
+                .attr("stroke-dasharray", totalLengthNZL + " " + totalLengthNZL)
+                .attr("stroke-dashoffset", totalLengthNZL)
+                .transition()
+                .duration(6000)
+                .ease(d3.easeLinear)
+                .attr("stroke-dashoffset", 0);
 
         });
 
