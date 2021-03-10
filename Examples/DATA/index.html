@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<!--
+
+Copyright 2021 The MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="d3-scale-radial.js"></script>
+    <link type="text/css" rel="stylesheet" href="./chem_radial.css">
+
+</head>
+
+<body>
+    <script>
+
+        var margin = {top: 20, right: 10, bottom: 20, left: 10};
+
+        var width = 960 - margin.left - margin.right,
+            height = 1000 - margin.top - margin.bottom;
+
+        var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var g = svg.append("g")
+        .attr("transform", "translate(" + 550 + "," + 450 + ")");
+        
+                var g2 = svg.append("g")
+        .attr("transform", "translate(" + 550 + "," + 450 + ")");
+
+        var gT = svg.append("g")
+        .attr("transform", "translate(" + 550 + "," + 450 + ")");
+
+
+        // ------------------------------------- CO2
+
+        var innerRadius =120,
+            outerRadius = 200;
+
+        var x = d3.scaleLinear()
+        .range([0, 2 * Math.PI]);
+
+        var y = d3.scaleRadial()
+        .range([innerRadius, outerRadius]);
+
+        var line = d3.lineRadial()
+        .angle(function(d) { return x(d.Index); })
+        .radius(function(d) { 
+            var randy=Math.random()*2-1
+            var alles = randy + parseFloat(d.Close) 
+            return y(alles); })
+        .curve(d3.curveCardinal)
+
+        var radius = 8
+        //radius 
+        var r = d3.scaleLinear()
+        .range([0, radius]);
+
+        //Line
+        var l = d3.scaleLinear()
+        .range([0, 360]);
+
+        //point
+        var c = d3.scaleLinear()
+        .range([0, 15]);
+
+        d3.csv("twtr_test.csv" , function(error, data2) {
+
+            x.domain([1,50]);
+            y.domain([16,21]);
+
+            g.selectAll("circle")
+                .data(data2)
+                .enter()
+                .append("circle")                            
+                .attr("r", function (d) { return 4; })
+                .attr("cy", function (d) { return y(d.Close) * Math.sin(x(d.Index)); })
+                .attr("cx", function (d) { return y(d.Close) * Math.cos(x(d.Index));})
+                .style("opacity", function (d) { return 1;})
+                .attr("id", function (d) { return "isl" })
+                .attr("stroke", function (d) { return "none"; })
+                .attr("fill", function (d) { return "orange"; })
+
+            var xAxis = g.append("g");
+
+            var yAxis = g.append("g")
+            .attr("text-anchor", "middle");
+
+            yAxis.append("circle")
+                .attr("fill", "none")
+                .attr("stroke", "white")
+                .attr("opacity", 0.2)
+                .attr("r", function() { return y(16)});
+
+        });
+
+        // ------------------------------------- TEMPERATURE
+
+        var innerRadiusT =220,
+            outerRadiusT = 260;
+
+        var xT = d3.scaleLinear()
+        .range([0, 2 * Math.PI]);
+
+        var yT = d3.scaleRadial()
+        .range([innerRadiusT, outerRadiusT]);
+
+        var lineT = d3.lineRadial()
+        .angle(function(d) { return x(d.Index); })
+        .radius(function(d) { 
+            var randy=Math.random()*2-1
+            var alles = randy + parseFloat(d.Close) 
+            return yT(alles); })
+        .curve(d3.curveCardinal)
+        
+        var area = d3.areaRadial()
+                .curve(d3.curveCardinal)
+        .angle(function(d) { return x(d.Index); })
+         .innerRadius(function(d) { 
+            var randy=Math.random()*2-1
+            var alles = 16 + 2*randy + parseFloat(d.Close) 
+            return yT(alles); })
+           .outerRadius(function(d) { 
+            var randy=Math.random()*2-1
+            var alles = 20 + 2*randy + parseFloat(d.Close) 
+            return yT(alles); })
+        
+
+        d3.csv("twtr_test.csv" , function(error, data) {
+
+            xT.domain([1,50]);
+            yT.domain([16,21]);
+            
+            var linePlotT = g.append("path")
+            .datum(data)
+            .attr("fill", "cyan")
+            .attr("stroke", "none")
+            .attr("opacity",0.5)
+            .attr("d", area);
+
+                       var linePlotT = g.append("path")
+            .datum(data)
+            .attr("fill", "orange")
+            .attr("stroke", "none")
+            .attr("opacity",0.8)
+            .attr("d", area);
+            
+            var linePlotT = g.append("path")
+            .datum(data)
+            .attr("fill", "none")
+            .attr("stroke", "cyan")
+            .attr("d", lineT);
+
+            var linePlotT = g.append("path")
+            .datum(data)
+            .attr("fill", "none")
+            .attr("stroke", "orange")
+            .attr("d", lineT);
+            
+            var xAxisT = gT.append("g");
+
+            var yAxisT = gT.append("g")
+            .attr("text-anchor", "middle");
+
+            yAxisT.append("circle")
+                .attr("fill", "none")
+                .attr("stroke", "white")
+                .attr("opacity", 0.2)
+                .attr("r", function() { return yT(17)});
+
+        });
+
+    </script>
+</body>
