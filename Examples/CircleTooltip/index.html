@@ -65,7 +65,6 @@
         .enter()
         .append("circle")
         .attr("cx", function(d){
-        console.log(d[0])
         rand = Math.random()
         return 100 + rand * d[0]* 30;})
         .attr("cy", function(d){
