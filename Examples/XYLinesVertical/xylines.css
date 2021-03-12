@@ -643,7 +643,7 @@ opacity: 1.0;
     width:950px;
     height: 800px;
     margin-right: 0px;
-    margin-left: 110px;
+    margin-left: 10px;
     margin-top: 0px;
     background-color: none;
     opacity: 1.0;
@@ -912,14 +912,14 @@ fill: white;
 .xaxis line {
 fill: none;
 stroke: #666;
-opacity: .5;
+opacity: 0;
 stroke-width: 1px;
 shape-rendering: crispEdges;
 }
 .xaxis text { 
-fill: #666;
+fill: #ccc;
 font-family: Garamond, Verdana, sans-serif; 
-font-size: 12px; 
+font-size: 10px; 
 color: gray;
 }
 
@@ -927,7 +927,7 @@ color: gray;
 .yaxis line {
 fill: none;
 stroke: #999;
-opacity: 0;
+opacity: 0.5;
 stroke-width: 1px; 
 shape-rendering: crispEdges;
 }
