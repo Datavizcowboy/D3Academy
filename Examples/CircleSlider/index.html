@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+    <!-- In the HEAD section we have the external resources and dependencies -->
+    <head>
+        <!-- Here we define the set of characters we use -->
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+        <!-- Here we get the D3 javascript library  -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/d3/4.8.0/d3.min.js"></script>
+
+        <!-- Here we get the common styles that apply to similar elements -->
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet'>
+        <link type="text/css" rel="stylesheet" href="./skylines.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+        <script src="https://unpkg.com/d3-simple-slider@0.1.2/build/d3-simple-slider.js"></script>
+    </head>
+
+    <body>
+
+        <!-- This is the box where the dataviz will be drawn -->
+        <div class="left-div">
+        </div>
+
+        <div class="banner">
+        </div>
+
+        <!-- This is the box where the title is -->
+        <div class="header">
+            <p class="title">The</br>Slider</p>
+    <p class="author">by Someone</p>
+    </div>
+
+<!-- Here goes the javascript bit with the D3.js code -->
+<script type="text/javascript">
+
+    //-------------------------------------------- SVG definition
+
+    // We start by defining the size of the SVG 
+    var width = 980;
+    var height = 900;
+
+    // We put the SVG inside the DIV and we define two attributes: width and height
+    var svgres = d3.select("div.left-div")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+
+    var svgbanner = d3.select("div.banner")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", 110);
+
+    // We create a group to gather all similar elements and keep the dataviz tidy and clean
+    dataviz = svgres.append("g")
+    dataviz2 = svgres.append("g")
+
+    gslider = svgbanner.append("g")
+        .attr('transform', 'translate(10,10)')
+
+    // ------------------------------------------- SLIDER
+
+    var data = [0, 2, 4, 6, 8, 10];
+
+    var slider = d3Slider.sliderHorizontal()
+    .domain(d3.extent(data))
+    .width(110)
+    .tickFormat(d3.format('.2'))
+    .ticks(3)
+    .default(0)
+    .on('onchange', val => {
+
+        thenewvalue = d3.format('.2')(val)
+
+        dataviz
+            .selectAll("circle")
+            .transition()
+            .duration(2000)
+            .style("opacity", 1)
+            .attr("r", function(d){return thenewvalue*50;})
+    });
+
+    gslider.call(slider);
+
+    // ------------------------------------------- DATA
+
+    var datos = [[180,50],[120,50],[40,30]]
+
+    // ------------------------------------------- DRAW A CIRCLE
+
+    dataviz
+        .selectAll("circle")
+        .data(datos)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d){
+        console.log(d[0])
+        rand = Math.random()
+        return 200 + rand * d[0];})
+        .attr("cy", function(d){
+        rand = Math.random()
+        return 200 + rand * 300;})
+        .attr("r", function(d){return d[0];})
+        .style("opacity", 1)
+        .attr("fill", function(d){return d3.rgb(d[0],255,d[1]);})
+        .attr("stroke", "none")
+        .attr("stroke-width",6)
+
+</script>
+
+</body>
+
+</html>
