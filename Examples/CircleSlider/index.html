@@ -78,6 +78,7 @@
             .selectAll("circle")
             .transition()
             .duration(2000)
+            .ease(d3.easeBack)
             .style("opacity", 1)
             .attr("r", function(d){return thenewvalue*50;})
     });
