@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="./topojson.js"></script>
+        <link type="text/css" rel="stylesheet" href="./cyclones.css">   
+    </head>
+    <body>
+
+        <div class="sphynx" id="sphynx"></div>  
+
+        <div class='header'> 
+            <p class="title">The Trajectory</p>
+        </div>
+
+        <script type="text/javascript">
+
+            var widthsphy=1100
+            var heightsphy=480
+
+            var svgsphy = d3.select("div.sphynx")
+            .append("svg")
+            .attr("width", widthsphy)
+            .attr("height", heightsphy)
+
+            var mapsphy=svgsphy.append("g")
+
+            var projection3 = d3.geoMercator()
+            .center([-45, 28])
+            .scale(800)
+            .rotate([75,0,0])
+            .translate([100, 200])
+            .precision(.1);
+
+            var path3 = d3.geoPath()
+            .projection(projection3);   
+
+            var graticule3 = d3.geoGraticule();
+
+            var pathLine = d3.line()
+//                    .curveLinear
+                    .x(function(d) { return projection3([d.lon, d.lat])[0]; })
+                    .y(function(d) { return projection3([d.lon, d.lat])[1]; }); 
+
+            var jsonfile='./world-50m.json'
+
+            d3.json(jsonfile, function(error, world) {
+
+                mapsphy.insert("path", ".graticule")
+                    .datum(topojson.feature(world, world.objects.land))
+                    .attr("class", "land")
+                    .attr("d", path3);
+            });
+
+//            for (i = 0; i < 18; i++) { 
+
+                var thejson="../DATA/cyclon_"+1828+".json"    
+
+                d3.json(thejson, function(error, data) { 
+
+                    var pathNZL = mapsphy
+                    .append("path")
+                    .style("stroke-width",".5px")
+                    .attr("opacity",1)    
+                    .attr("stroke", d3.rgb(0,0,0))
+                    .attr("d", pathLine(data))
+
+                    })
+
+//            }
+
+        </script>
+    </body>
+</html>

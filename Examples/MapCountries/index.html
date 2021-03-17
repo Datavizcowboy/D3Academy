@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--
+Copyright or © or Copr. Jorge Martinez-Rey, 19th October 2017
+graphicprototype@gmail.com
+
+This software is a computer program whose purpose is to present the data visualization projects on Icebergs in the Southern Ocean using D3.js scripts.
+
+This software is governed by the CeCILL  license under French law and
+abiding by the rules of distribution of free software.  You can  use, 
+modify and/ or redistribute the software under the terms of the CeCILL
+license as circulated by CEA, CNRS and INRIA at the following URL
+"http://www.cecill.info". 
+
+As a counterpart to the access to the source code and rights to copy,
+modify and redistribute granted by the license, users are provided only
+with a limited warranty  and the software's author, the holder of the
+economic rights, and the successive licensors  have only  limited
+liability. 
+
+In this respect, the user's attention is drawn to the risks associated
+with loading, using,  modifying and/or developing or reproducing the
+software by the user in light of its specific status of free software,
+that may mean  that it is complicated to manipulate,  and  that  also
+therefore means  that it is reserved for developers  and  experienced
+professionals having in-depth computer knowledge. Users are therefore
+encouraged to load and test the software's suitability as regards their
+requirements in conditions enabling the security of their systems and/or 
+data to be ensured and,  more generally, to use and operate it in the 
+same conditions as regards security. 
+
+The fact that you are presently reading this means that you have had
+knowledge of the CeCILL license and that you accept its terms.
+-->
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script
+		src="https://cdn.rawgit.com/eligrey/canvas-toBlob.js/f1a01896135ab378aa5c0118eadd81da55e698d8/canvas-toBlob.js"></script>
+	<script
+		src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js"></script>
+	<script type="text/javascript" src="./d3.min.js"></script>
+	<script src="./d3.geo.projection.v0.min.js"></script>
+	<script src="./topojson.js"></script>
+	<link type="text/css" rel="stylesheet" href="./volcano.css">
+</head>
+
+<body>
+
+	<div class="left-div">
+	</div>
+
+	<script type="text/javascript">
+
+		var width = 1200;
+		var height = 1000;
+
+		var svg = d3.select("div.left-div")
+			.append("svg")
+            .attr("width",1200)
+            .attr("height",1000)
+
+		var g4 = svg.append("g");
+		var g = svg.append("g");
+
+		var projection = d3.geo.robinson()
+			.translate([600, 400])
+//            .clipAngle(0)
+			.precision(.1)
+			 .center([0, 0])
+			.scale(180)
+			.rotate([0, 0, 0]);
+
+		var path = d3.geo.path()
+			.projection(projection);
+
+		var graticule = d3.geo.graticule();
+
+		g4.append("path")
+		    .datum(graticule)
+		    .attr("class", "graticule")
+		    .attr("d", path);
+
+        d3.json("./world-110m2.json", function(error, topology) {
+            
+		g4.selectAll("path")
+		    .data(topojson.feature(topology, topology.objects.countries)
+		          .features)
+		    .enter()
+		    .append("path")
+		    .attr("d", path)
+		    .style("fill", function(d) {
+		        if (d.id == 10) return "white";
+		        else return "darkgreen";})
+		  });
+ 
+
+	</script>
+
+</body>
+
+</html>
