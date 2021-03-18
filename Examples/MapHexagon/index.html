@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="./topojson.js"></script>
+        <script src="./hexbin.js"></script>
+        <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+        <link type="text/css" rel="stylesheet" href="./cyclones.css">   
+    </head>
+    <body>
+
+        <div class="sphynx" id="sphynx"></div>  
+
+        <div class='header'> 
+            <p class="title">The Hexagonal Binning</p>
+        </div>
+
+        <script type="text/javascript">
+
+            var width=1100
+            var height=580
+
+            var svgsphy = d3.select("div.sphynx")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+
+            var g=svgsphy.append("g")
+
+            var projectionhex = d3.geoRobinson()
+            .center([-20, 5 ])
+            .scale(150)
+            .rotate([75,0,0])
+            .translate([500, 300])
+            .precision(.1);
+
+            var path = d3.geoPath()
+            .projection(projectionhex);
+
+            var hexbin = d3.hexbin()
+            .radius(6)  
+            .x(function(d) {return projectionhex([d.lon, d.lat])[0];})
+            .y(function(d) {return projectionhex([d.lon, d.lat])[1];});
+
+            var theregion = function(d) {
+                var sumi = 0;
+
+                for(var i = 0; i < d.length; i++)
+                {
+                    sumi = +d[i].o2;
+                }
+                return sumi
+            }
+
+            d3.json("../DATA/bia_o2.json", function(error, data) { 
+
+                g.append("g")  
+                    .attr("class", "hexagons")
+                    .selectAll("path")
+                    .data(hexbin(data)).enter()
+                    .append("path")
+                    .attr("class", "hexagon")
+                    .attr("d", hexbin.hexagon())
+                    .attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")"; })
+                    .style("opacity",1.)
+                    .style("fill", function(d) {
+                    console.log(d)
+                    if (theregion(d)=="999.0") return ("#ddd");
+                    else return d3.rgb(255,theregion(d)*33*80,theregion(d)*33*40);})
+                    .style("stroke", "white");
+            });
+
+
+        </script>
+    </body>
+</html>
