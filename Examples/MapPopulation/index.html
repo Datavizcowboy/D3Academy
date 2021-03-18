@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="./topojson.js"></script>
+        <link type="text/css" rel="stylesheet" href="./cyclones.css">   
+    </head>
+    <body>
+
+        <div class="sphynx" id="sphynx"></div>  
+
+        <div class='header'> 
+            <p class="title">The Population</p>
+        </div>
+
+        <script type="text/javascript">
+
+            var widthsphy=1100
+            var heightsphy=580
+
+            var svgsphy = d3.select("div.sphynx")
+            .append("svg")
+            .attr("width", widthsphy)
+            .attr("height", heightsphy)
+
+            var mapsphy=svgsphy.append("g")
+
+      var projectioncoral = d3.geoMercator()
+            .center([98.99, 14.7])
+            .scale(60000)
+            .rotate([160.45, -1.9, 0])
+            .translate([420, 560])
+
+        var pathcoral = d3.geoPath()
+            .projection(projectioncoral);
+
+//            var graticule3 = d3.geoGraticule();
+
+        d3.json("../DATA/Population2014.geojson", function (error, mapData) {
+            var features = mapData.features;
+        mapsphy.selectAll('path')
+                .data(features)
+                .enter().append('path')
+                .attr('d', pathcoral)
+                .style('stroke', "none")
+                .style('fill', function (d, i) {
+                    //        console.log(features[i].properties.POPULATION)  
+                    tone = features[i].properties.POPULATION;
+                    // return d3.rgb(0,250-tone/200,255);
+                    return d3.rgb(255, 250 - tone / 200, 0);
+
+                    //        return d3.rgb(255-tone/300,255-tone/300,255-tone/300);
+                })
+        });
+
+//            }
+
+        </script>
+    </body>
+</html>
