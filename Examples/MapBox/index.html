@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+
+
+        <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+
+        <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.js">
+
+
+            <script src="https://d3js.org/d3.v4.min.js"></script>
+            <script src="./topojson.js"></script>
+            <link type="text/css" rel="stylesheet" href="./cyclones.css">   
+            </head>
+            <body>
+
+                <div class="map" id="map" style="width: 750px; height: 600px; margin-left: 100px"></div>
+
+            <div class='header'> 
+                <p class="title">The MapBox</p>
+            </div>
+
+            <script type="text/javascript">
+
+                var map = L.map('map').setView([14.4, -61], 3);
+            mapLink = 
+                '<a href="http://opencyclemap.org">OpenStreetMap</a>';
+            //            '<a href="http://wmflabs.org">OpenTopoMap</a>';
+            //            '<a href="http://opentopomap.org">OpenTopoMap</a>';
+            L.tileLayer(
+                //                 'http://c.tiles.wmflabs.org/osm-no-labels/{z}/{x}/{y}.png', {
+                'http://b.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                    //                 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', {
+                    //                 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+                    //                'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+                    attribution: '&copy; ' + mapLink + ' Contributors',
+                    maxZoom: 8,
+                }).addTo(map);
+
+            map._initPathRoot()    
+
+            var svg = d3.select("#map").select("svg")
+            var g = svg.append("g")
+
+            var xpos=70 
+            var ypos=17
+            var gridsize=2
+
+            var pointA = new L.LatLng(ypos-(gridsize/2), -xpos-(gridsize/2));
+            var pointB = new L.LatLng(ypos+(gridsize/2), -xpos-(gridsize/2));
+            var pointD = new L.LatLng(ypos+(gridsize/2), -xpos+(gridsize/2));
+            var pointC = new L.LatLng(ypos-(gridsize/2), -xpos+(gridsize/2));
+
+            var pointList = [pointA, pointC, pointD, pointB,pointA];
+
+            var firstpolyline = new L.polyline(pointList, {
+                color: 'white',
+                weight: 2,
+                opacity: 1,
+                smoothFactor: 0
+            });
+            firstpolyline.addTo(map);
+            
+            
+
+            d3.json("../DATA/All_Volcanoes.json", function(data) {
+                data.forEach(function(d) {
+                    d.LatLng = new L.LatLng(d.lat,d.lon)
+                })
+
+                var feature = g.selectAll("circle")
+                .data(data)
+                .enter().append("circle")
+                .style("stroke", "none")  
+                .style("opacity", .6) 
+                .style("fill", "orange")
+                .attr("r", 6);  
+
+                map.on("viewreset", update);
+                update();
+
+                function update() {
+                    feature.attr("transform", 
+                                 function(d) { 
+                        return "translate("+ 
+                            map.latLngToLayerPoint(d.LatLng).x +","+ 
+                            map.latLngToLayerPoint(d.LatLng).y +")";
+                    }
+                  )
+                }
+            })	
+
+
+        </script>
+        </body>
+</html>
