@@ -67,7 +67,6 @@
                     .attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")"; })
                     .style("opacity",1.)
                     .style("fill", function(d) {
-                    console.log(d)
                     if (theregion(d)=="999.0") return ("#ddd");
                     else return d3.rgb(255,theregion(d)*33*80,theregion(d)*33*40);})
                     .style("stroke", "white");
