@@ -9,9 +9,21 @@ import pandas as pd
 import nltk
 nltk.download('punkt')
 
+
+folder='/Users/jorge/Sites/D3Academy/JSON_datasets/'
+
+
 """ ______________________________________ READ THE CSV FILE and STORE IDs """
 
-for j in range(2010,2021):
+
+therank = []
+thefreq = []
+theyear = []
+
+keyword = 'olympics'
+
+
+for j in range(1920,1925):
 
     fp=open('/Users/jorge/Documents/Projects/Academy/archive_NYT1/df_'+str(j)+'.csv','r')
 
@@ -21,7 +33,7 @@ for j in range(2010,2021):
     
     for t in fp.readlines():
             model_name=t.split(str(j))        
-            if (len(model_name) != 1 ):
+            if (len(model_name) > 1 ):
                 container.append(model_name[0])
                 container_pub.append(model_name[1])
     fp.close()
@@ -36,22 +48,15 @@ for j in range(2010,2021):
     word_dist = nltk.FreqDist(words)
     
     rslt = pd.DataFrame(word_dist.most_common(),columns=['Word', 'Frequency'])
-    thenumber = rslt[rslt['Word'].str.contains("technology")]
+    thenumber = rslt[rslt['Word'].str.contains(keyword)]
     position = thenumber.iloc[[0]]
     print("Frequency of the keyword_Rank"+str(position))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    therank.append(thenumber.iloc[[0]].index[0].tolist())
+    thefreq.append(thenumber['Frequency'].values[0].tolist())
+    theyear.append(j)
+    
+mypanda=pd.DataFrame({"year":theyear,"rank":therank,"freq":thefreq})  
+mypanda.reset_index().to_json(orient='records',path_or_buf=folder+str(keyword)+'.json')
+    
+    
