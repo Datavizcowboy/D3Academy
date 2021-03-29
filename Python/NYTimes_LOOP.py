@@ -18,9 +18,9 @@ thefreq = []
 theyear = []
 thearticles = []
 
-keyword = 'olympics'
+keyword = 'smartphone'
 
-for j in range(2010,2012):
+for j in range(1920,1922):
 
     fp=open('/Users/jorge/Documents/Projects/Academy/archive_NYT1/df_'+str(j)+'.csv','r')
 
@@ -46,13 +46,19 @@ for j in range(2010,2012):
     
     rslt = pd.DataFrame(word_dist.most_common(),columns=['Word', 'Frequency'])
     thenumber = rslt[rslt['Word'].str.contains(keyword)]
-    position = thenumber.iloc[[0]]
-    print("Frequency of the keyword_Rank"+str(position))
+    if (len(thenumber)>0):
+        position = thenumber.iloc[[0]]
+        print("Frequency of the keyword_Rank"+str(position))
     
-    therank.append(thenumber.iloc[[0]].index[0].tolist())
-    thefreq.append(thenumber['Frequency'].values[0].tolist())
-    theyear.append(j)
-    thearticles.append(container[-1])
-    
+        therank.append(thenumber.iloc[[0]].index[0].tolist())
+        thefreq.append(thenumber['Frequency'].values[0].tolist())
+        theyear.append(j)
+        thearticles.append(container[-1])
+    else:
+        therank.append(0)
+        thefreq.append(0)
+        theyear.append(j)
+        thearticles.append(container[-1])
+        
 mypanda=pd.DataFrame({"year":theyear,"rank":therank,"freq":thefreq,"articles":thearticles})  
 mypanda.reset_index().to_json(orient='records',path_or_buf=folder+str(keyword)+'.json')
