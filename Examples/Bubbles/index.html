@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="./seasonality.css">
+    </head>
+
+    <body>      
+
+        <div class="left-div">
+        </div>
+
+        <script type="text/javascript">
+
+            var width = 1500;
+            var height = 1500;
+
+            var svg = d3.select("div.left-div")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+
+            var scales = svg.append("g");
+            
+            var dataset = {
+                "children": [
+
+                    { "Name": "Olives", "Count": 43190 },
+                    { "Name": "Tea", "Count": 41590 },
+                    { "Name": "Mashed Potatoes", "Count": 25830 },
+                    { "Name": "Boiled Potatoes", "Count": 20740 },
+                    { "Name": "Milk", "Count": 18940 },
+                    { "Name": "Chicken Salad", "Count": 18090 },
+                    { "Name": "Vanilla Ice Cream", "Count": 17130 },
+                    { "Name": "Cocoa", "Count": 16360 },
+                    { "Name": "Lettuce Salad", "Count": 15660 },
+                    { "Name": "Lobster Salad", "Count": 15110 },
+                    { "Name": "Chocolate", "Count": 14890 },
+                    { "Name": "Apple Pie", "Count": 14870 },
+                    { "Name": "Orange Juice", "Count": 14230 },
+                    { "Name": "American Cheese", "Count": 13720 },
+                    { "Name": "Green Peas", "Count": 13410 },
+                    { "Name": "Assorted Cakes", "Count": 1331 },
+                    { "Name": "French Fried Potatoes", "Count": 1328 },
+                    { "Name": "Potato Salad", "Count": 1306 },
+                    { "Name": "Baked Potatoes", "Count": 1293 },
+                    { "Name": "Roquefort", "Count": 1273 },
+                    { "Name": "Stewed Prunes", "Count": 1268 },
+                    { "Name": "Olives", "Count": 4319 },
+                    { "Name": "Tea", "Count": 4159 },
+                    { "Name": "Mashed Potatoes", "Count": 2583 },
+                    { "Name": "Boiled Potatoes", "Count": 2074 },
+                    { "Name": "Milk", "Count": 1894 },
+                    { "Name": "Chicken Salad", "Count": 1809 },
+                    { "Name": "Vanilla Ice Cream", "Count": 1713 },
+                    { "Name": "Cocoa", "Count": 1636 },
+                    { "Name": "Lettuce Salad", "Count": 1566 },
+                    { "Name": "Lobster Salad", "Count": 1511 },
+                    { "Name": "Baked Potatoes", "Count": 1293 },
+                    { "Name": "Roquefort", "Count": 1273 },
+                    { "Name": "Stewed Prunes", "Count": 1268 },
+                    { "Name": "Olives", "Count": 4319 },
+                    { "Name": "Tea", "Count": 4159 },
+                    { "Name": "Mashed Potatoes", "Count": 2583 },
+                    { "Name": "Boiled Potatoes", "Count": 2074 },
+                    { "Name": "Milk", "Count": 1894 },
+                    { "Name": "Chicken Salad", "Count": 1809 },
+                    { "Name": "Vanilla Ice Cream", "Count": 1713 },
+                    { "Name": "Cocoa", "Count": 1636 }
+                ]
+            };
+
+            var bubble = d3.pack(dataset)
+            .size([800, 800])
+            .padding(0)
+
+            var nodes = d3.hierarchy(dataset)
+            .sum(function (d) { return d.Count; });
+
+            var node = scales.selectAll(".node")
+            .data(bubble(nodes).descendants())
+            .enter()
+            .filter(function (d) {
+                return !d.children
+            })
+            .append("g")
+            .attr("class", "node")
+            .attr("id", function (d,i) { return "goo2_" + i; })
+            .attr("transform", function (d) {
+                return "translate(" + 1.1 * d.x + "," + 1.1 * d.y + ")";
+            });
+
+            node.append("title")
+                .text(function (d) {
+                return d.Name + ": " + d.Count;
+            });
+            
+            node.append("circle")
+             .attr("r", function (d) {
+                 return d.r;
+             })
+             .style("stroke", function (d, i) {
+                 return "darkcyan";
+             })
+             .style("fill", function (d, i) {
+                 return "none";
+             })
+             .attr("opacity", 1)
+            
+            node.append("text")
+            .attr("dy", ".2em")
+            .style("text-anchor", "middle")
+            .text(function (d) {
+                return d.data.Name.substring(0, d.r / 3);
+            })
+            .attr("font-family", "sans-serif")
+            .attr("font-size", function (d) {
+                 return d.r / 5;
+//                return 14;
+            })
+            .attr("fill", "#666");
+
+            node.append("text")
+            .attr("dy", "1.3em")
+            .style("text-anchor", "middle")
+            .text(function (d) {
+                return d.data.Count;
+            })
+            .attr("font-family", "Gill Sans", "Gill Sans MT")
+            .attr("font-size", function (d) {
+                 return d.r / 5;
+//                return 14;
+            })
+            .attr("fill", "#999");
+
+        d3.select(self.frameElement)
+            .style("height", 400 + "px")
+            .style("width", 800 + "px");
+            
+            
+        </script>
+
+    </body></html>
