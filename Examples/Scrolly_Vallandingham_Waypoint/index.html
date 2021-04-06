@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/noframework.waypoints.min.js"></script>
+    <script src='./graphic.js'></script>
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/7124072/6351572/css/fonts.css" />
+    <link rel='stylesheet' href='./graphic.css' />
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet'>
+    <!--    <link type="text/css" rel="stylesheet" href="./people.css">-->
+</head>
+
+<body>
+    <body
+
+          <main>
+    <div class='library'>
+        <div class='library__graphic graphic'>
+
+
+            <div class='graphic__prose'>
+                <p class='trigger' data-step='0'>QUERY ORIGIN </br> </br><span>The search tool provides a plethora of paths for queries, either by typing or selecting the full spectrum of suggestions </br></br>
+    There are three pathways the search tool could take you: Organic, Predictive or Refinement of the query typed. 
+    These paths are: 
+    </span> </p>
+<p class='trigger' data-step='1'>Organic </br></br>
+<span>Most of the people who interact with the search tool type and explore the output of 
+    the search engine as it is.</span></p>
+<p class='trigger' data-step='2'>Predictive</br></br>
+<span>Empathy enables the user to explore predictive options, such as top trends in line
+    with the query typed or the historical similar searches.
+    </br></br></br>
+</span>TopTrend</br></br><span> The user selected a query from the popular searches</br></br></br>
+</span>Historic</br></br> <span>The user selected a query from the history of queries</br></br></br>
+</span>Linked</br></br> <span>The user loads an URL with a query
+</span></p>
+<p class='trigger' data-step='3'>Refinement</br>
+<span>
+    </br></br>
+</span>Empathy</br></br><span> The user selected a query from the suggestions.</br></br>
+</span>Category</br></br><span> The user selected a query from the suggestions and it has a category filter.</br></br>
+</span>Related</br></br><span> The user select/deselect a related tag. There is a previous query on the search box.</br></br>
+</span>Empathy_Next</br></br><span> The user selected a query from the next queries suggestions list.</br></br>
+</span>Next</br></br><span> The user clicked in the button “Show More“ from a Next Query that is shown in the middle of the results grid.
+
+</span></p>
+<p class='trigger' data-step='4'>Total </br>
+<span>These options portray the paths a user might be lead into. They strongly depend on the device used.</span></p>
+</div>
+<div class='graphic__vis'>
+    <div class='graphic__search'>
+        <img src = './search_box.png' height='40px' width = '450px' ></img>
+</div>
+
+</div>
+</div>
+</div>
+</main>
+
+<!-- svg -->
+
+<script>
+
+    (function() {
+
+        // helper function so we can map over dom selection
+        function selectionToArray(selection) {
+            var len = selection.length
+            var result = []
+            for (var i = 0; i < len; i++) {
+                result.push(selection[i])
+            }
+            return result
+        }
+
+        function waypoints() {
+            // select elements
+            var graphicEl = document.querySelector('.graphic')
+            var graphicVisEl = graphicEl.querySelector('.graphic__vis')
+            var triggerEls = selectionToArray(graphicEl.querySelectorAll('.trigger'))
+
+            // viewport height
+            var viewportHeight = window.innerHeight
+            var halfViewportHeight = Math.floor(viewportHeight / 2)
+
+            // a global function creates and handles all the vis + updates
+            var graphic = createGraphic('.graphic')
+
+            // handle the fixed/static position of grahpic
+            var toggle = function(fixed, bottom) {
+                if (fixed) graphicVisEl.classList.add('is-fixed')
+                else graphicVisEl.classList.remove('is-fixed')
+
+                if (bottom) graphicVisEl.classList.add('is-bottom')
+                else graphicVisEl.classList.remove('is-bottom')
+            }
+
+            // setup a waypoint trigger for each trigger element
+            var waypoints = triggerEls.map(function(el) {
+
+                // get the step, cast as number					
+                var step = +el.getAttribute('data-step')
+
+                return new Waypoint({
+                    element: el, // our trigger element
+                    handler: function(direction) {
+                        // if the direction is down then we use that number,
+                        // else, we want to trigger the previous one
+                        var nextStep = direction === 'down' ? step : Math.max(0, step - 1)
+
+                        // tell our graphic to update with a specific step
+                        graphic.update(nextStep)
+                    },
+                    offset: '50%',  // trigger halfway up the viewport
+                })
+            })
+
+            // enter (top) / exit (bottom) graphic (toggle fixed position)
+            var enterWaypoint = new Waypoint({
+                element: graphicEl,
+                handler: function(direction) {
+                    var fixed = direction === 'down'
+                    var bottom = false
+                    toggle(fixed, bottom)
+                },
+            })
+
+            var exitWaypoint = new Waypoint({
+                element: graphicEl,
+                handler: function(direction) {
+                    var fixed = direction === 'up'
+                    var bottom = !fixed
+                    toggle(fixed, bottom)
+                },
+                offset: 'bottom-in-view', // waypoints convenience instead of a calculation
+            })
+            }
+
+        waypoints()
+
+    })()
+
+</script>
+</body>
