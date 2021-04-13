@@ -68,9 +68,12 @@
                     { "Name": "Cocoa", "Count": 1636 }
                 ]
             };
+            
+            
+            
 
             var bubble = d3.pack(dataset)
-            .size([800, 800])
+            .size([100, 100])
             .padding(0)
 
             var nodes = d3.hierarchy(dataset)
@@ -88,23 +91,30 @@
             .attr("transform", function (d) {
                 return "translate(" + 1.1 * d.x + "," + 1.1 * d.y + ")";
             });
+            
+            console.log(nodes)
+            console.log(bubble)
+            
+            
+            
+            
 
             node.append("title")
                 .text(function (d) {
                 return d.Name + ": " + d.Count;
             });
             
-            node.append("circle")
-             .attr("r", function (d) {
-                 return d.r;
-             })
-             .style("stroke", function (d, i) {
-                 return "darkcyan";
-             })
-             .style("fill", function (d, i) {
-                 return "none";
-             })
-             .attr("opacity", 1)
+//            node.append("circle")
+//             .attr("r", function (d) {
+//                 return d.r;
+//             })
+//             .style("stroke", function (d, i) {
+//                 return "darkcyan";
+//             })
+//             .style("fill", function (d, i) {
+//                 return "none";
+//             })
+//             .attr("opacity", 1)
             
             node.append("text")
             .attr("dy", ".2em")
@@ -119,18 +129,18 @@
             })
             .attr("fill", "#666");
 
-            node.append("text")
-            .attr("dy", "1.3em")
-            .style("text-anchor", "middle")
-            .text(function (d) {
-                return d.data.Count;
-            })
-            .attr("font-family", "Gill Sans", "Gill Sans MT")
-            .attr("font-size", function (d) {
-                 return d.r / 5;
-//                return 14;
-            })
-            .attr("fill", "#999");
+//            node.append("text")
+//            .attr("dy", "1.3em")
+//            .style("text-anchor", "middle")
+//            .text(function (d) {
+//                return d.data.Count;
+//            })
+//            .attr("font-family", "Gill Sans", "Gill Sans MT")
+//            .attr("font-size", function (d) {
+//                 return d.r / 5;
+////                return 14;
+//            })
+//            .attr("fill", "#999");
 
         d3.select(self.frameElement)
             .style("height", 400 + "px")
