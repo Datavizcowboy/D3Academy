@@ -52,33 +52,53 @@
 
     // ------------------------------------------- DRAW A CIRCLE
 
-    dataviz
-        .selectAll("circle")
+        dataviz
+        .selectAll("rect")
         .data(datos)
         .enter()
-        .append("circle")
-        .attr("cx", function(d){
-        console.log(d[0])
-        rand = Math.random()
-        return 200 + rand * d[0];})
-        .attr("cy", function(d){
-        rand = Math.random()
-        return 200 + rand * 300;})
-        .attr("r", function(d){return d[0];})
+        .append("rect")
+        .attr("x", function(d,i){
+            return 200 + i * 100;})
+        .attr("y", function(d,i){
+                return 100 + i * 30})
+        .attr("width", function(d){return 100;})
+        .attr("height", function(d){return 30;})
+
         .style("opacity", 1)
         .attr("fill", function(d){return d3.rgb(d[0],255,d[1]);})
         .attr("stroke", "none")
         .attr("stroke-width",6)
+    
+    
+    
+    
+//    dataviz
+//        .selectAll("circle")
+//        .data(datos)
+//        .enter()
+//        .append("circle")
+//        .attr("cx", function(d){
+//        console.log(d[0])
+//        rand = Math.random()
+//        return 200 + rand * d[0];})
+//        .attr("cy", function(d){
+//        rand = Math.random()
+//        return 200 + rand * 300;})
+//        .attr("r", function(d){return d[0];})
+//        .style("opacity", 1)
+//        .attr("fill", function(d){return d3.rgb(d[0],255,d[1]);})
+//        .attr("stroke", "none")
+//        .attr("stroke-width",6)
 
-    dataviz
-        .append('line')
-        .attr("x1", 0)
-        .attr("y1", 350)
-        .attr("x2", 900)
-        .attr("y2", 350)
-        .attr("stroke-width", .5)
-        .style("opacity", 1)
-        .attr("stroke", "#333");
+//    dataviz
+//        .append('line')
+//        .attr("x1", 0)
+//        .attr("y1", 350)
+//        .attr("x2", 900)
+//        .attr("y2", 350)
+//        .attr("stroke-width", .5)
+//        .style("opacity", 1)
+//        .attr("stroke", "#333");
 
 </script>
 

@@ -65,6 +65,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             return d;
                 }, function(error, data) {
         if (error) throw error;
+        
+        console.log(data[0].Date)
       
         x.domain(d3.extent(data, function(d) { return d.Date; }));
   		y.domain(d3.extent(data, function(d) { return d.Close; }));
@@ -78,14 +80,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       var yAxis = g.append("g")
           .attr("text-anchor", "middle");
 
-  
       yAxis.append("circle")
       		.attr("fill", "none")
           .attr("stroke", "black")
       		.attr("opacity", 0.2)
           .attr("r", function() { return y(y.domain()[0])});
       
-
       var xAxis = g.append("g");
   
       

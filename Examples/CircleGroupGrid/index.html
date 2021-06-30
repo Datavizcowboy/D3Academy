@@ -45,13 +45,38 @@
     
     // We create the grid of groups before plugging in the data
     var thespot = 0
-    for (lev = 0; lev < 5; lev++) {
-        for (k = 0; k < 8; k++) {
-            thespot = thespot + 1
+    
+    
+    var datos = [[18,5],[12,5],[4,3]]
+    
+    var fechas = [1,2,3,4,5,6,8,9,10,12,14]
+    
+    var categorias = [0,1,2,3,4,5]
+
+    
+    
+    var futuro = [{"index":11,"date":"2021-08-01T00:00:00.000Z","fullname":"BOOKS","totaltotal":26.99},
+                 {"index":11,"date":"2021-08-02T00:00:00.000Z","fullname":"BOOKS","totaltotal":126.99}]
+    
+    
+    for (they = 0; they < 1; they++) {
+        
+        console.log("they_"+they)
+        
+        for (thex = 0; thex < futuro.length; thex++) {
+            
+            console.log("thex_"+thex)
+
+            console.log("spot_" + thespot)
+
             var myGraph = svgres.append('g')
+            
             .attr("transform", function (d) { 
-                return "translate(" + (0 + k * 120) + "," + (0 + lev * 120 ) + ")"; })
+                return "translate(" + (thex * 120) + "," + (they * 120 ) + ")"; })            
             .attr("id", function () { return "spot_" + thespot })
+            
+            thespot = thespot + 1
+            
             }
     }
 
@@ -61,7 +86,12 @@
 
     // ------------------------------------------- DATA
 
-    var datos = [[18,5],[12,5],[4,3]]
+//    var datos = [[18,5],[12,5],[4,3]]
+    
+    var datos = [10,20,30, 40]
+    
+
+//    var datos = [[18,5]]
 
     // ------------------------------------------- DRAW A CIRCLE
 
@@ -70,18 +100,15 @@
 
     d3.select("#spot_"+h)
         .selectAll("circle")
-        .data(datos)
+        .data(futuro)
         .enter()
         .append("circle")
         .attr("cx", function(d){
-        console.log(d[0])
-        rand = Math.random()
-        return 40 + 2 * rand * d[0];})
+            return 80 ;})
         .attr("cy", function(d){
-        rand = Math.random()
-        return 40 + 2 * rand * 30;})
+            return 40 ;})
         .attr("r", function(d){
-        return d[0];})
+            return futuro[h].totaltotal;})
         .style("opacity", 1)
         .attr("fill", function(d){return d3.rgb(d[0]*10,255,d[1]*20);})
         .attr("stroke", "none")
